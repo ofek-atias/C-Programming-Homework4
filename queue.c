@@ -4,8 +4,11 @@
 #include <string.h>
 
 
-void create_queue(Queue *q) {
-
+void create_queue(Queue *q)
+{
+    q->prev_song = (Song*)malloc(sizeof(Song)); 
+    q->cur_song = (Song*)malloc(sizeof(Song));
+    create_database(q->queue_songs,20);
     printf("ERROR: NULL Queue pointer.\n");
 
     printf("ERROR: Failed to allocate songs array.\n");

@@ -59,7 +59,9 @@ void db_add_song(Database *db, Song *s)
 
 void db_remove_song(Database *db, const char *title) 
 {
-    int i = 0;
+    int i= 0;
+    int j = 0;
+    int found_s_index = -1;
     if(db == NULL)
     {
         printf("ERROR: NULL Database pointer.\n");
@@ -72,27 +74,52 @@ void db_remove_song(Database *db, const char *title)
         exit(1);
     }
 
-    while(db->songs[i]->title != NULL)
+    for(i = 0; i < db->count; i++)
     {
-        i++;
-        if(i == sizeof(db->songs))
+        if(strcmp(db->songs[i]->title,title) == 0)
         {
-            printf("ERROR: Song not found in database.\n");
-            exit(1);
-        }
-        
+            found_s_index = i;
+            break;
+        }     
+    }    
+
+    if(found_s_index == -1)
+    {
+        printf("ERROR: Song not found in database.\n");
+        return;
     }
     
-    free(db->songs[i]);
+    free_song(db->songs[found_s_index]);    
+
+    for(j = found_s_index; j < db->count - 1; j++)
+    {
+        db->songs[j] = db->songs[j+1];
+    }
+
     db->count -= 1;
 
 }
 
 void free_db(Database *db) 
 {
+    int i = 0;
 
+    if (db == NULL)
+    {
         printf("ERROR: NULL Database pointer.\n");
+        exit(1);
+    }
+ 
+    for (i = 0; i < db->count; i++)
+    {
+        free_song(db->songs[i]);
+    }
 
+    if (db->songs != NULL)
+    {
+        free(db->songs);
+    }
+    free(db);
 }
 
 
