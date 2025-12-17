@@ -6,28 +6,85 @@
 
 void create_queue(Queue *q)
 {
-    q->prev_song = (Song*)malloc(sizeof(Song)); 
-    q->cur_song = (Song*)malloc(sizeof(Song));
-    create_database(q->queue_songs,20);
-    printf("ERROR: NULL Queue pointer.\n");
+    if (q == NULL)
+    {
+        printf("ERROR: NULL Queue pointer.\n");
+        exit(1);
+    }
+    
+    q->prev_song = NULL; 
+    q->cur_song = NULL;
+    q->queue_songs = (char**) calloc(MAX_Q_SIZE, sizeof(char*));
 
-    printf("ERROR: Failed to allocate songs array.\n");
+    if (q->queue_songs == NULL)
+    {
+        printf("ERROR: Failed to allocate songs array.\n");
+        exit(1);
+    }
+
+    q->capacity = MAX_Q_SIZE;
+    q->front = 0;
+    q->rear = 0;
+    q->size = 0;
 }
 
-
 void queue_add_song(Queue *q, Database *db, const char *title) {
+    
+    int i = 0;
+    int found_s_index = -1;
+    
+    if (q == NULL)
+    {
+        printf("ERROR: NULL queue pointer.\n");
+        exit(1);
+    }
+    
+    if(db == NULL)
+    {
+        printf("ERROR: NULL database pointer.\n");
+        exit(1);
+    }
 
-    printf("ERROR: NULL queue pointer.\n");
+    if(title == NULL)
+    {
+        printf("ERROR: NULL title.\n");
+        exit(1);
+    }
+    
+    for(i = 0; i < db->count; i++)
+    {
+        if(strcmp(db->songs[i]->title,title) == 0)
+        {
+            found_s_index = i;
+            break;
+        }     
+    }    
 
-    printf("ERROR: NULL database pointer.\n");
+    if(found_s_index == -1)
+    {
+        printf("ERROR: Song was not found in database.\n");
+        return;
+    }
+    
+    if (q->size == q->capacity)// maybe should  before the song not found error
+    {
+        printf("ERROR: Queue is full.\n");
+        return;
+    }
 
-    printf("ERROR: NULL title.\n");
+    q->queue_songs[q->rear] = strdup(title) ;
 
-    printf("ERROR: Song was not found in database.\n");
+    if ( q->queue_songs[q->rear] == NULL)// waiting for instructions from benji from the forum.
+    {
+        printf("ERROR: Failed to allocate memory for song title.\n");
+        exit(1); 
+    }
 
-    printf("ERROR: Queue is full.\n");
+    
+    q->rear = ((q->rear+1)%MAX_Q_SIZE);
+    q->size +=1;
 
-    printf("ERROR: Failed to allocate memory for song title.\n");
+    
 }
 
 
