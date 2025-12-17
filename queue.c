@@ -83,17 +83,40 @@ void queue_add_song(Queue *q, Database *db, const char *title) {
     
     q->rear = ((q->rear+1)%MAX_Q_SIZE);
     q->size +=1;
-
     
 }
 
 
 
-void queue_next_song(Queue *q) {
+void queue_next_song(Queue *q) { //validate this function
 
-    printf("ERROR: NULL queue pointer.\n");
 
-    printf("ERROR: Queue is empty.\n");
+    if(q == NULL)
+    {
+        printf("ERROR: NULL queue pointer.\n");
+        exit(1);
+    }
+
+    if(q->size == 0)
+    {
+        printf("ERROR: Queue is empty.\n");
+        return;
+    }
+     
+    if(q->prev_song != NULL)
+    {
+        free(q->prev_song); 
+
+    }
+
+    q->prev_song = q->cur_song;
+
+    q->cur_song = q->queue_songs[q->front];
+    q->queue_songs[q->front] = NULL;
+
+    q->front = (q->front + 1) % MAX_Q_SIZE;
+    q->size -= 1;  
+    
 }
 
 
