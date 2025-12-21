@@ -39,7 +39,7 @@ void db_add_song(Database *db, Song *s)
         printf("ERROR: NULL Song pointer.\n");
         exit(1);
     }
-    
+
     if(db->capacity == db->count)
     {
         Song **temp_songs = (Song**) realloc(db->songs,db->capacity*2*sizeof(Song*));
@@ -49,12 +49,11 @@ void db_add_song(Database *db, Song *s)
             printf("ERROR: Failed to expand database.\n");
             exit(1);
         }
+
         db->songs = temp_songs;
         db->capacity *=2;
-        
     }
 
-   
     db->songs[db->count] = s; 
     db->count +=1;
 }
@@ -64,6 +63,7 @@ void db_remove_song(Database *db, const char *title)
     int i= 0;
     int j = 0;
     int found_s_index = -1;
+    
     if(db == NULL)
     {
         printf("ERROR: NULL Database pointer.\n");
@@ -126,10 +126,6 @@ void free_db(Database *db)
 
 
 
-int main()
-{ 
-    return 0;
-}
 
     /*
     Database *db = (Database*)malloc(sizeof(Database));
