@@ -66,20 +66,16 @@ void queue_add_song(Queue *q, Database *db, const char *title) {
         return;
     }
     
-    if (q->size == q->capacity)// maybe should  before the song not found error
+    if (q->size == MAX_Q_SIZE)// maybe should  before the song not found error
     {
         printf("ERROR: Queue is full.\n");
         return;
     }
 
-    q->queue_songs[q->rear] = strdup(title) ;
+    q->queue_songs[q->rear] = strdup(title);
 
-    if ( q->queue_songs[q->rear] == NULL)// waiting for instructions from benji from the forum.
-    {
-        printf("ERROR: Failed to allocate memory for song title.\n");
-        exit(1); 
-    }
-
+    if(q->queue_songs[q->rear] == NULL)
+        exit(1);
     
     q->rear = ((q->rear+1)%MAX_Q_SIZE);
     q->size +=1;
@@ -106,7 +102,6 @@ void queue_next_song(Queue *q) { //validate this function
     if(q->prev_song != NULL)
     {
         free(q->prev_song); 
-
     }
 
     q->prev_song = q->cur_song;
@@ -121,13 +116,51 @@ void queue_next_song(Queue *q) { //validate this function
 
 
 void print_queue(const Queue *q) {
-    printf("ERROR: NULL queue pointer.\n");
 
-    printf("Queue is empty.\n");
+    int i = 0;
 
+    if(q == NULL)
+    {
+        printf("ERROR: NULL queue pointer.\n");
+        exit(1);
+    }
+    
+    if(q->size == 0)
+    {
+        printf("Queue is empty.\n");
+        return;
+    }
+    
     printf("Queue contents:\n");
+
+    for (i = 0; i < q->size; i++)
+    {
+        printf("%d. %s\n", i+1, q->queue_songs[(q->front+i)%MAX_Q_SIZE]);
+    }
 }
 
 void free_queue(Queue *q) {
-    printf("ERROR: NULL queue pointer.\n");
+
+    int i = 0;
+
+    if(q == NULL)
+    {
+        printf("ERROR: NULL queue pointer.\n");
+        exit(1);
+    }
+
+    for(i = 0; i < MAX_Q_SIZE; i++)
+    {
+        if(q->queue_songs[i] != NULL)
+            free(q->queue_songs[i]);
+    }
+    free(q->queue_songs);
+
+    if(q->prev_song != NULL)
+        free(q->prev_song);
+
+    if(q->cur_song != NULL)
+        free(q->cur_song);
+    
+    free(q);
 }

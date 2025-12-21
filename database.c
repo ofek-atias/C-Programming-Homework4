@@ -33,11 +33,13 @@ void db_add_song(Database *db, Song *s)
         printf("ERROR: NULL Database pointer.\n");
         exit(1);
     }
+
     if(s == NULL)
     {
         printf("ERROR: NULL Song pointer.\n");
         exit(1);
     }
+    
     if(db->capacity == db->count)
     {
         Song **temp_songs = (Song**) realloc(db->songs,db->capacity*2*sizeof(Song*));

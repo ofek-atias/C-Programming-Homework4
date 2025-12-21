@@ -11,16 +11,22 @@ void set_song(Song *s, const char *title, const char *artist,
         printf("ERROR: NULL Song pointer.\n");
         exit(1);
     }
+
     if (title == NULL)
     {
         printf("ERROR: NULL title pointer.\n");
         exit(1);
     }
+
     if (artist == NULL)
     {    
         printf("ERROR: NULL artist pointer.\n");
         exit(1);
     }
+
+    if(duration == NULL || genre == NULL)
+        exit(1);
+
     (s->title) = (char*) malloc(strlen(title)+1);
     (s->artist) = (char*) malloc(strlen(artist)+1);
 
@@ -29,6 +35,7 @@ void set_song(Song *s, const char *title, const char *artist,
         printf("ERROR: Failed to allocate memory for title.\n");
         exit(1);
     }
+    
     if (s-> artist == NULL)
     {
         printf("ERROR: Failed to allocate memory for artist.\n");
