@@ -11,6 +11,12 @@ void create_database(Database *db, int initial_capacity)
         exit(1);
     }
 
+    /* In case create_database can be called twice.
+    if (db->capacity > 0) {
+        return;
+    }
+    */
+
     db->songs = (Song**) calloc(initial_capacity, sizeof(Song*));
     
     if (db->songs == NULL)
@@ -21,30 +27,28 @@ void create_database(Database *db, int initial_capacity)
 
     db->capacity = initial_capacity;
     db->count = 0;
-    
-    
 }
 
 
 void db_add_song(Database *db, Song *s)
 {
-    if(db == NULL)
+    if (db == NULL)
     {
         printf("ERROR: NULL Database pointer.\n");
         exit(1);
     }
 
-    if(s == NULL)
+    if (s == NULL)
     {
         printf("ERROR: NULL Song pointer.\n");
         exit(1);
     }
 
-    if(db->capacity == db->count)
+    if (db->capacity == db->count)
     {
-        Song **temp_songs = (Song**) realloc(db->songs,db->capacity*2*sizeof(Song*));
+        Song **temp_songs = (Song**) realloc(db->songs, db->capacity * 2 * sizeof(Song*));
             
-        if(temp_songs == NULL)
+        if (temp_songs == NULL)
         {
             printf("ERROR: Failed to expand database.\n");
             exit(1);
@@ -54,46 +58,44 @@ void db_add_song(Database *db, Song *s)
         db->capacity *=2;
     }
 
-    db->songs[db->count] = s; 
+    db->songs[db->count] = s;
     db->count +=1;
 }
 
 void db_remove_song(Database *db, const char *title) 
-{
-    int i= 0;
-    int j = 0;
-    int found_s_index = -1;
-    
-    if(db == NULL)
+{   
+    if (db == NULL)
     {
         printf("ERROR: NULL Database pointer.\n");
         exit(1);
     }
 
-    if(title == NULL)
+    if (title == NULL)
     {
         printf("ERROR: NULL title.\n");
         exit(1);
     }
 
-    for(i = 0; i < db->count; i++)
+    int found_s_index = -1;
+
+    for (int i = 0; i < db->count; i++)
     {
-        if(strcmp(db->songs[i]->title,title) == 0)
+        if (strcmp(db->songs[i]->title, title) == 0)
         {
             found_s_index = i;
             break;
         }     
     }    
 
-    if(found_s_index == -1)
+    if (found_s_index == -1)
     {
         printf("ERROR: Song not found in database.\n");
         return;
     }
     
-    free_song(db->songs[found_s_index]);    
+    free_song(db->songs[found_s_index]); 
 
-    for(j = found_s_index; j < db->count - 1; j++)
+    for (int j = found_s_index; j < db->count - 1; j++)
     {
         db->songs[j] = db->songs[j+1];
     }
@@ -104,15 +106,13 @@ void db_remove_song(Database *db, const char *title)
 
 void free_db(Database *db) 
 {
-    int i = 0;
-
     if (db == NULL)
     {
         printf("ERROR: NULL Database pointer.\n");
         exit(1);
     }
  
-    for (i = 0; i < db->count; i++)
+    for (int i = 0; i < db->count; i++)
     {
         free_song(db->songs[i]);
     }
@@ -120,8 +120,10 @@ void free_db(Database *db)
     if (db->songs != NULL)
     {
         free(db->songs);
+        db->songs = NULL;
     }
     free(db);
+    db = NULL;
 }
 
 

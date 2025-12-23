@@ -119,8 +119,22 @@ void test_queue() {
     create_database(db, 5);
     
     Song *s1 = malloc(sizeof(Song));
+    Song *s2 = malloc(sizeof(Song));
+    Song *s3 = malloc(sizeof(Song));
+    Song *s4 = malloc(sizeof(Song));
+    Song *s5 = malloc(sizeof(Song));
+    
     set_song(s1, "I Know The End", "Phoebe Bridgers", 321, ROCK);
+    set_song(s2, "Smoke Signals", "Phoebe Bridgers", 298, POP);
+    set_song(s3, "Funeral", "Phoebe Bridgers", 312, ROCK);
+    set_song(s4, "Demi Moore", "Phoebe Bridgers", 285, POP);
+    set_song(s5, "Scott Street", "Phoebe Bridgers", 267, ROCK);
+
     db_add_song(db, s1);
+    db_add_song(db, s2);
+    db_add_song(db, s3);
+    db_add_song(db, s4);
+    db_add_song(db, s5);
 
     printf("\n--- Test 1: Create queue ---\n");
     Queue *q = malloc(sizeof(Queue));
@@ -128,11 +142,38 @@ void test_queue() {
     
     printf("\n--- Test 2: Add songs to queue ---\n");
     queue_add_song(q, db, "I Know The End");
+    queue_add_song(q, db, "Smoke Signals");
+    queue_add_song(q, db, "Funeral");
+    queue_add_song(q, db, "Demi Moore");
+    queue_add_song(q, db, "Scott Street");
+    queue_add_song(q, db, "I Know The End");
+    queue_add_song(q, db, "Smoke Signals");
+    queue_add_song(q, db, "Funeral");
+    queue_add_song(q, db, "Demi Moore");
+    queue_add_song(q, db, "Scott Street");
+    queue_add_song(q, db, "I Know The End");
+    queue_add_song(q, db, "Smoke Signals");
+    queue_add_song(q, db, "Funeral");
+    queue_add_song(q, db, "Demi Moore");
+    queue_add_song(q, db, "Scott Street");
+    queue_add_song(q, db, "I Know The End");
+    queue_add_song(q, db, "Smoke Signals");
+    queue_add_song(q, db, "Funeral");
+    queue_add_song(q, db, "Demi Moore");
+    queue_add_song(q, db, "Scott Street");
+    queue_add_song(q, db, "Funeral");
+    queue_add_song(q, db, "Demi Moore");
+    queue_add_song(q, db, "Scott Street");
     print_queue(q);
     
     printf("\n--- Test 5: Play next songs ---\n");
-    queue_next_song(q);
-    printf("Current: %s\n", q->cur_song);
+    for (int i = 0; i < 3; i++){
+        queue_next_song(q);
+        printf("Current: %s\n", q->cur_song);
+    }
+
+    queue_add_song(q, db, "Funeral");
+    print_queue(q);
     
     printf("\n--- Test 10: Free queue ---\n");
     free_queue(q);

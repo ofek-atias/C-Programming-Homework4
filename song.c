@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// TODO : verify if you need to free the input pointers title and artist or not.
 void set_song(Song *s, const char *title, const char *artist, /*We may have to allocate memory dynamically to the struct song, waiting for an answer*/
               int duration, Genre genre) {
     
@@ -25,13 +26,14 @@ void set_song(Song *s, const char *title, const char *artist, /*We may have to a
     }
 
     (s->title) = (char*) malloc(strlen(title)+1);
-    (s->artist) = (char*) malloc(strlen(artist)+1);
 
     if (s->title == NULL)
     {
         printf("ERROR: Failed to allocate memory for title.\n");
         exit(1);
     }
+
+    (s->artist) = (char*) malloc(strlen(artist)+1);
     
     if (s-> artist == NULL)
     {
@@ -42,8 +44,8 @@ void set_song(Song *s, const char *title, const char *artist, /*We may have to a
     strcpy(s->title, title);
     strcpy(s->artist, artist);
 
-    s-> duration_in_seconds = duration;
-    s-> genre = genre;
+    s->duration_in_seconds = duration;
+    s->genre = genre;
 }
 
 
@@ -86,16 +88,21 @@ void print_song(const Song *s)
 
 void free_song(Song *s) 
 {
-    if (s == NULL) //unsure
+    if (s == NULL)
     {
         printf("ERROR: NULL Song pointer.\n");
         exit(1);
     }
-    if (s->title != NULL)
+    if (s->title != NULL) {
         free(s->title);
-    if (s->artist != NULL)
+        s->title = NULL;
+    }
+    if (s->artist != NULL) {
         free(s->artist);
+        s->artist = NULL;
+    }
     free(s);
+    s = NULL;
 }
 
 /*int main(){
